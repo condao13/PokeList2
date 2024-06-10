@@ -2,7 +2,7 @@
     "name": "Pokémon List",
     "short_name": "Pokémon",
     "description": "A simple Pokémon list with PWA support",
-    "start_url": "/index.html",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#3b4cca",
