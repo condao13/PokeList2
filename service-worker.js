@@ -18,11 +18,11 @@ self.addEventListener('install', function(event) {
               return cache.delete(key);
             }));
           }
-        });
-      })
-      .then(function() {
+        })
         // Adicionando os recursos ao cache
-        return cache.addAll(urlsToCache);
+        .then(function() {
+          return cache.addAll(urlsToCache);
+        });
       })
   );
 });
