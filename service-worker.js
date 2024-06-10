@@ -3,7 +3,8 @@ const urlsToCache = [
   '/',
   '/styles.css',
   '/script.js',
-  '/imagem/OIP.png'
+  '/imagem/OIP.png',
+  '/manifest.json'
 ];
 
 self.addEventListener('install', function(event) {
@@ -11,65 +12,30 @@ self.addEventListener('install', function(event) {
     caches.open(CACHE_NAME)
       .then(function(cache) {
         console.log('Opened cache');
-        // Limitando o tamanho do cache para evitar o crescimento indefinido
-        return cache.keys().then(function(keys) {
-          if (keys.length > 50) {
-            return Promise.all(keys.map(function(key) {
-              return cache.delete(key);
-            }));
-          }
-        })
-        // Adicionando os recursos ao cache
-        .then(function() {
-          return cache.addAll(urlsToCache);
-        });
+        return cache.addAll(urlsToCache);
+      })
+      .catch(function(error) {
+        console.error('Error caching files:', error);
       })
   );
 });
 
 self.addEventListener('fetch', function(event) {
+  // Ignorar solicitações que não sejam GET
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
         if (response) {
           return response;
         }
-
-        var fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then(
-          function(response) {
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            var responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(function(cache) {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          }
-        );
+        return fetch(event.request);
+      })
+      .catch(function(error) {
+        console.error('Error fetching resource:', error);
       })
   );
 });
-
-// Verificar e limpar o cache periodicamente para garantir que não cresça indefinidamente
-self.addEventListener('activate', function(event) {
-  event.waitUntil(
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(
-        cacheNames.filter(function(cacheName) {
-          return cacheName !== CACHE_NAME;
-        }).map(function(cacheName) {
-          return caches.delete(cacheName);
-        })
-      );
-    })
-  );
-});
-
-// Adicionar lógica adicional para outras estratégias de cache conforme necessário
