@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon List</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <header>
+        <h1>Pokémon List</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="home">
+            <h2>Home</h2>
+            <div id="pokemon-list"></div>
+        </section>
+        <section id="about">
+            <h2>About</h2>
+            <p>This site provides a list of Pokémon with their images and names. Explore and learn more about your favorite Pokémon!</p>
+        </section>
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>For more information, contact us at pokemonsite@example.com</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Pokémon Site. All rights reserved.</p>
+    </footer>
+
+    <!-- Modal -->
+    <div id="pokemon-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="pokemon-details"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+    </script>
+</body>
+</html>
